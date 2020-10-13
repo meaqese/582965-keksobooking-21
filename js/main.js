@@ -1,5 +1,16 @@
 'use strict';
 
+const OFFERS_COUNT = 8;
+const TYPES = [`palace`, `flat`, `house`, `bungalow`];
+const CHECKIN_HOURS = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT_HOURS = [`12:00`, `13:00`, `14:00`];
+const FEATURES_LIST = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const PHOTOS_LIST = [
+  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
+];
+
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
 
@@ -9,14 +20,12 @@ Math.randRange = function (min, max) {
   return Math.round(min + (Math.random() * (max - min)));
 };
 
+Math.randElement = function (array, inclusive = false) {
+  const max = (inclusive === false) ? array.length - 1 : array.length;
+  return array[Math.randRange(0, max)];
+};
 
 const generateOffers = function (count) {
-  const types = [`palace`, `flat`, `house`, `bungalow`];
-  const checkInHours = [`12:00`, `13:00`, `14:00`];
-  const checkOutHours = [`12:00`, `13:00`, `14:00`];
-  const featuresList = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-  const photosList = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-
   const offers = [];
 
   for (let i = 1; i <= count; i++) {
@@ -31,14 +40,14 @@ const generateOffers = function (count) {
         "title": `Заголовок`,
         "address": `${locationX}, ${locationY}`,
         "price": 100,
-        "type": types[Math.randRange(0, types.length - 1)],
+        "type": TYPES[Math.randRange(0, TYPES.length - 1)],
         "rooms": i,
         "guests": i,
-        "checkin": checkInHours[Math.randRange(0, checkInHours.length - 1)],
-        "checkout": checkOutHours[Math.randRange(0, checkOutHours.length - 1)],
-        "features": featuresList.slice(0, Math.randRange(1, featuresList.length)),
+        "checkin": Math.randElement(CHECKIN_HOURS),
+        "checkout": Math.randElement(CHECKOUT_HOURS),
+        "features": FEATURES_LIST.slice(0, Math.randRange(1, FEATURES_LIST.length)),
         "description": `Описание`,
-        "photos": photosList.slice(0, Math.randRange(1, photosList.length))
+        "photos": PHOTOS_LIST.slice(0, Math.randRange(1, PHOTOS_LIST.length))
       },
       "location": {
         "x": locationX,
@@ -77,5 +86,5 @@ const renderOffers = function (fragment) {
 };
 
 renderOffers(
-    createOffers(generateOffers(8))
+    createOffers(generateOffers(OFFERS_COUNT))
 );
