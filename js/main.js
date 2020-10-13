@@ -16,21 +16,21 @@ map.classList.remove(`map--faded`);
 
 const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 
-Math.randRange = function (min, max) {
+const getRandRange = function (min, max) {
   return Math.round(min + (Math.random() * (max - min)));
 };
 
-Math.randElement = function (array, inclusive = false) {
+const getRandElement = function (array, inclusive = false) {
   const max = (inclusive === false) ? array.length - 1 : array.length;
-  return array[Math.randRange(0, max)];
+  return array[getRandRange(0, max)];
 };
 
 const generateOffers = function (count) {
   const offers = [];
 
   for (let i = 1; i <= count; i++) {
-    let locationX = Math.randRange(0, map.clientWidth);
-    let locationY = Math.randRange(130, 630);
+    let locationX = getRandRange(0, map.clientWidth);
+    let locationY = getRandRange(130, 630);
 
     offers.push({
       "author": {
@@ -40,14 +40,14 @@ const generateOffers = function (count) {
         "title": `Заголовок`,
         "address": `${locationX}, ${locationY}`,
         "price": 100,
-        "type": TYPES[Math.randRange(0, TYPES.length - 1)],
+        "type": TYPES[getRandRange(0, TYPES.length - 1)],
         "rooms": i,
         "guests": i,
-        "checkin": Math.randElement(CHECKIN_HOURS),
-        "checkout": Math.randElement(CHECKOUT_HOURS),
-        "features": FEATURES_LIST.slice(0, Math.randRange(1, FEATURES_LIST.length)),
+        "checkin": getRandElement(CHECKIN_HOURS),
+        "checkout": getRandElement(CHECKOUT_HOURS),
+        "features": FEATURES_LIST.slice(0, getRandRange(1, FEATURES_LIST.length)),
         "description": `Описание`,
-        "photos": PHOTOS_LIST.slice(0, Math.randRange(1, PHOTOS_LIST.length))
+        "photos": PHOTOS_LIST.slice(0, getRandRange(1, PHOTOS_LIST.length))
       },
       "location": {
         "x": locationX,
