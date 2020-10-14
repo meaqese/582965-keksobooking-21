@@ -1,7 +1,11 @@
 'use strict';
 
+const OFFER_FOR_CARD = 0;
 const OFFERS_COUNT = 8;
-const TYPES = [`palace`, `flat`, `house`, `bungalow`];
+const TYPES = {
+  en: [`palace`, `flat`, `house`, `bungalow`],
+  ru: [`Дворец`, `Квартира`, `Дом`, `Бунгало`]
+};
 const CHECKIN_HOURS = [`12:00`, `13:00`, `14:00`];
 const CHECKOUT_HOURS = [`12:00`, `13:00`, `14:00`];
 const FEATURES_LIST = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
@@ -13,8 +17,10 @@ const PHOTOS_LIST = [
 
 const map = document.querySelector(`.map`);
 map.classList.remove(`map--faded`);
+const mapPins = map.querySelector(`.map__pins`);
 
 const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
 const getRandRange = function (min, max) {
   return Math.round(min + (Math.random() * (max - min)));
@@ -40,7 +46,7 @@ const generateOffers = function (count) {
         "title": `Заголовок`,
         "address": `${locationX}, ${locationY}`,
         "price": 100,
-        "type": TYPES[getRandRange(0, TYPES.length - 1)],
+        "type": TYPES.en[getRandRange(0, TYPES.en.length - 1)],
         "rooms": i,
         "guests": i,
         "checkin": getRandElement(CHECKIN_HOURS),
@@ -80,11 +86,69 @@ const createOffers = function (offers) {
 
 
 const renderOffers = function (fragment) {
-  const mapPins = map.querySelector(`.map__pins`);
-
-  mapPins.appendChild(fragment);
+  mapPins.append(fragment);
 };
 
+const offers = generateOffers(OFFERS_COUNT);
+
 renderOffers(
-    createOffers(generateOffers(OFFERS_COUNT))
+    createOffers(offers)
 );
+
+const clearAllChilds = function (parentNode) {
+  while (parentNode.lastElementChild) {
+    parentNode.removeChild(parentNode.lastElementChild);
+  }
+};
+
+const createCard = function (offersList, need) {
+  const fragment = document.createDocumentFragment();
+
+  const {offer, author} = offersList[need];
+  const card = cardTemplate.cloneNode(true);
+
+  card.querySelector(`.popup__title`).textContent = offer.title;
+  card.querySelector(`.popup__text--address`).textContent = offer.address;
+  card.querySelector(`.popup__text--price`).textContent = `${offer.price}₽/ночь`;
+  card.querySelector(`.popup__type`)
+    .textContent = TYPES.ru[
+      TYPES.en.indexOf(offer.type)
+    ];
+  card.querySelector(`.popup__text--capacity`)
+    .textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
+  card.querySelector(`.popup__text--time`)
+    .textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  const featuresList = card.querySelector(`.popup__features`);
+  clearAllChilds(featuresList);
+  for (let feature of offer.features) {
+    let featureItem = document.createElement(`li`);
+    featureItem.classList.add(`popup__feature`);
+    featureItem.classList.add(`popup__feature--${feature}`);
+
+    featuresList.append(featureItem);
+  }
+  card.querySelector(`.popup__description`).textContent = offer.description;
+
+  const photosList = card.querySelector(`.popup__photos`);
+  clearAllChilds(photosList);
+  for (let photo of offer.photos) {
+    let photoItem = document.createElement(`img`);
+    photoItem.width = 45;
+    photoItem.height = 40;
+
+    photoItem.src = photo;
+    photoItem.alt = `Фотография жилья`;
+    photoItem.classList.add(`popup__photo`);
+
+
+    photosList.append(photoItem);
+  }
+
+  card.querySelector(`.popup__avatar`).src = author.avatar;
+
+  fragment.append(card);
+
+  return fragment;
+};
+
+mapPins.after(createCard(offers, OFFER_FOR_CARD));
