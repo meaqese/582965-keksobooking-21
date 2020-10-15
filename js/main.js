@@ -95,7 +95,7 @@ renderOffers(
     createOffers(offers)
 );
 
-const clearAllChilds = function (parentNode) {
+const clearAllChildren = function (parentNode) {
   while (parentNode.lastElementChild) {
     parentNode.removeChild(parentNode.lastElementChild);
   }
@@ -119,7 +119,7 @@ const createCard = function (offersList, need) {
   card.querySelector(`.popup__text--time`)
     .textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   const featuresList = card.querySelector(`.popup__features`);
-  clearAllChilds(featuresList);
+  clearAllChildren(featuresList);
   for (let feature of offer.features) {
     let featureItem = document.createElement(`li`);
     featureItem.classList.add(`popup__feature`);
@@ -130,18 +130,14 @@ const createCard = function (offersList, need) {
   card.querySelector(`.popup__description`).textContent = offer.description;
 
   const photosList = card.querySelector(`.popup__photos`);
-  clearAllChilds(photosList);
+  const photoItem = photosList.querySelector(`.popup__photo`);
+
+  clearAllChildren(photosList);
   for (let photo of offer.photos) {
-    let photoItem = document.createElement(`img`);
-    photoItem.width = 45;
-    photoItem.height = 40;
+    let newPhotoItem = photoItem.cloneNode(true);
+    newPhotoItem.src = photo;
 
-    photoItem.src = photo;
-    photoItem.alt = `Фотография жилья`;
-    photoItem.classList.add(`popup__photo`);
-
-
-    photosList.append(photoItem);
+    photosList.append(newPhotoItem);
   }
 
   card.querySelector(`.popup__avatar`).src = author.avatar;
