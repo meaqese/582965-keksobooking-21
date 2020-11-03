@@ -1,6 +1,6 @@
 'use strict';
 
-const OFFER_FOR_CARD = 0;
+// const OFFER_FOR_CARD = 0;
 const OFFERS_COUNT = 8;
 const TYPES = {
   en: [`palace`, `flat`, `house`, `bungalow`],
@@ -16,11 +16,48 @@ const PHOTOS_LIST = [
 ];
 
 const map = document.querySelector(`.map`);
-map.classList.remove(`map--faded`);
+const mapPin = map.querySelector(`.map__pin--main`);
+const mapPinAfter = getComputedStyle(mapPin, `::after`);
+
 const mapPins = map.querySelector(`.map__pins`);
 
 const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+// const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
+const mapFilters = map.querySelector(`.map__filters`);
+const mapFiltersBlocks = mapFilters.querySelectorAll(`select, fieldset`);
+
+const adForm = document.querySelector(`.ad-form`);
+const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
+
+const getInactivePinCoords = function () {
+  const mapPinStyles = getComputedStyle(mapPin);
+
+  const x = Math.round(parseInt(mapPinStyles.left, 10) + parseInt(mapPinStyles.width, 10) / 2);
+  const y = Math.round(mapPin.clientHeight / 2 + mapPin.offsetTop);
+
+  return [x, y];
+};
+
+const addressInput = adForm.querySelector(`#address`);
+addressInput.value = getInactivePinCoords().join(`, `);
+
+
+const disableAll = function (elements = HTMLAllCollection) {
+  for (let element of elements) {
+    element.disabled = true;
+  }
+};
+
+const enableAll = function (elements = HTMLAllCollection) {
+  for (let element of elements) {
+    element.disabled = false;
+  }
+};
+
+disableAll(adFormFieldsets);
+disableAll(mapFiltersBlocks);
+
 
 const getRandRange = function (min, max) {
   return Math.round(min + (Math.random() * (max - min)));
@@ -84,7 +121,6 @@ const createOffers = function (offers) {
   return fragment;
 };
 
-
 const renderOffers = function (fragment) {
   mapPins.append(fragment);
 };
@@ -95,13 +131,13 @@ renderOffers(
     createOffers(offers)
 );
 
-const clearAllChildren = function (parentNode) {
-  while (parentNode.lastElementChild) {
-    parentNode.removeChild(parentNode.lastElementChild);
-  }
-};
+/* const clearAllChildren = function (parentNode) {
+    while (parentNode.lastElementChild) {
+      parentNode.removeChild(parentNode.lastElementChild);
+    }
+  };
 
-const createCard = function (offersList, need) {
+  const createCard = function (offersList, need) {
   const fragment = document.createDocumentFragment();
 
   const {offer, author} = offersList[need];
@@ -147,4 +183,59 @@ const createCard = function (offersList, need) {
   return fragment;
 };
 
-mapPins.after(createCard(offers, OFFER_FOR_CARD));
+mapPins.after(createCard(offers, OFFER_FOR_CARD));*/
+
+const getActivePinCoords = function () {
+  const x = Math.round(mapPin.clientWidth / 2 + mapPin.offsetLeft);
+  const y = parseInt(getComputedStyle(mapPin).top, 10) + mapPin.clientHeight + parseInt(mapPinAfter.height, 10);
+
+  return [x, y];
+};
+
+
+const doActiveAll = function () {
+  map.classList.remove(`map--faded`);
+  adForm.classList.remove(`ad-form--disabled`);
+  enableAll(adFormFieldsets);
+  enableAll(mapFiltersBlocks);
+
+  addressInput.value = getActivePinCoords().join(`, `);
+};
+
+mapPin.addEventListener(`mousedown`, function (evt) {
+  if (evt.button === 0) {
+    doActiveAll();
+  }
+});
+
+mapPin.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter`) {
+    doActiveAll();
+  }
+});
+
+const roomsCount = adForm.querySelector(`#room_number`);
+const guestsCount = adForm.querySelector(`#capacity`);
+
+const checkCompatibility = function (input) {
+  const rooms = parseInt(roomsCount.value, 10);
+  const guests = parseInt(guestsCount.value, 10);
+
+  if (rooms === 100 && guests > 0) {
+    input.setCustomValidity(`Жилье не для гостей`);
+  } else if (rooms < guests) {
+    input.setCustomValidity(`Количество комнат меньше количества гостей`);
+  } else {
+    input.setCustomValidity(``);
+  }
+
+  input.reportValidity();
+};
+
+roomsCount.addEventListener(`change`, function () {
+  checkCompatibility(roomsCount);
+});
+
+guestsCount.addEventListener(`change`, function () {
+  checkCompatibility(guestsCount);
+});
