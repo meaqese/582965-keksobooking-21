@@ -30,8 +30,18 @@ const mapFiltersBlocks = mapFilters.querySelectorAll(`select, fieldset`);
 const adForm = document.querySelector(`.ad-form`);
 const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
 
+const getInactivePinCoords = function () {
+  const mapPinStyles = getComputedStyle(mapPin);
+
+  const x = Math.round(parseInt(mapPinStyles.left, 10) + parseInt(mapPinStyles.width, 10) / 2);
+  const y = Math.round(mapPin.clientHeight / 2 + mapPin.offsetTop);
+
+  return [x, y];
+};
+
 const addressInput = adForm.querySelector(`#address`);
-addressInput.value = `${mapPin.clientWidth / 2 + mapPin.offsetLeft}, ${mapPin.clientHeight / 2 + mapPin.offsetTop}`;
+addressInput.value = getInactivePinCoords().join(`, `);
+
 
 const disableAll = function (elements = HTMLAllCollection) {
   for (let element of elements) {
@@ -176,10 +186,10 @@ renderOffers(
 mapPins.after(createCard(offers, OFFER_FOR_CARD));*/
 
 const getActivePinCoords = function () {
-  const x = mapPin.clientWidth / 2 + mapPin.offsetLeft;
+  const x = Math.round(mapPin.clientWidth / 2 + mapPin.offsetLeft);
   const y = parseInt(getComputedStyle(mapPin).top, 10) + mapPin.clientHeight + parseInt(mapPinAfter.height, 10);
 
-  return {x, y};
+  return [x, y];
 };
 
 
@@ -189,8 +199,7 @@ const doActiveAll = function () {
   enableAll(adFormFieldsets);
   enableAll(mapFiltersBlocks);
 
-  const {x, y} = getActivePinCoords();
-  addressInput.value = `${x}, ${y}`;
+  addressInput.value = getActivePinCoords().join(`, `);
 };
 
 mapPin.addEventListener(`mousedown`, function (evt) {
@@ -209,7 +218,12 @@ const roomsCount = adForm.querySelector(`#room_number`);
 const guestsCount = adForm.querySelector(`#capacity`);
 
 const checkCompatibility = function (input) {
-  if (parseInt(roomsCount.value, 10) < parseInt(guestsCount.value, 10)) {
+  const rooms = parseInt(roomsCount.value, 10);
+  const guests = parseInt(guestsCount.value, 10);
+
+  if (rooms === 100 && guests > 0) {
+    input.setCustomValidity(`Жилье не для гостей`);
+  } else if (rooms < guests) {
     input.setCustomValidity(`Количество комнат меньше количества гостей`);
   } else {
     input.setCustomValidity(``);
