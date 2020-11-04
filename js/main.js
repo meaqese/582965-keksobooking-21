@@ -139,9 +139,6 @@ const renderOffers = function (fragment) {
 
 const offers = generateOffers(OFFERS_COUNT);
 
-renderOffers(
-    createOffers(offers)
-);
 
 const clearAllChildren = function (parentNode) {
   while (parentNode.lastElementChild) {
@@ -225,6 +222,9 @@ const doActiveAll = function () {
   adForm.classList.remove(`ad-form--disabled`);
   enableAll(adFormFieldsets);
   enableAll(mapFiltersBlocks);
+  renderOffers(
+      createOffers(offers)
+  );
 
   addressInput.value = getActivePinCoords().join(`, `);
 };
@@ -250,10 +250,13 @@ const checkRoomsAndGuestsCompatibility = function (input) {
 
   if (rooms === 100 && guests > 0) {
     input.setCustomValidity(`Жилье не для гостей`);
+  } else if (rooms < 100 && guests === 0) {
+    input.setCustomValidity(`Жилье только для гостей`);
   } else if (rooms < guests) {
     input.setCustomValidity(`Количество комнат меньше количества гостей`);
   } else {
-    input.setCustomValidity(``);
+    roomsCount.setCustomValidity(``);
+    guestsCount.setCustomValidity(``);
   }
 
   input.reportValidity();
