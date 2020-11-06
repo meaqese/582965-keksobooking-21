@@ -18,12 +18,14 @@
   const getRandRange = window.util.getRandRange;
   const getRandElement = window.util.getRandElement;
 
+  const mapPin = document.querySelector(`.map__pin`);
+
   const generateOffers = function (count) {
     const offers = [];
 
     for (let i = 1; i <= count; i++) {
       let locationX = getRandRange(0, window.main.map.clientWidth);
-      let locationY = getRandRange(130, 630);
+      let locationY = getRandRange(130 - mapPin.clientHeight, 630 - mapPin.clientHeight);
 
       offers.push({
         "author": {
@@ -31,7 +33,7 @@
         },
         "offer": {
           "title": `Заголовок`,
-          "address": `${locationX}, ${locationY}`,
+          "address": `${Math.round(locationX + (mapPin.clientWidth / 2))}, ${locationY + mapPin.clientHeight}`,
           "price": 100,
           "type": TYPES.en[getRandRange(0, TYPES.en.length - 1)],
           "rooms": i,

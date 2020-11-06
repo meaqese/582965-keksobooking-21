@@ -1,15 +1,16 @@
 'use strict';
 
 (function () {
+  const MAP_PIN_MAIN_HEIGHT = 84;
+
   const map = window.main.map;
-  const mapPin = window.form.mapPin;
-  const mapPinAfter = getComputedStyle(mapPin, `::after`);
+  const mapPinMain = window.form.mapPinMain;
 
   const addressInput = window.main.adForm.querySelector(`#address`);
 
   const getActivePinCoords = function () {
-    const x = Math.round(mapPin.clientWidth / 2 + mapPin.offsetLeft);
-    const y = parseInt(getComputedStyle(mapPin).top, 10) + mapPin.clientHeight + parseInt(mapPinAfter.height, 10);
+    const x = Math.round(mapPinMain.clientWidth / 2 + mapPinMain.offsetLeft);
+    const y = parseInt(getComputedStyle(mapPinMain).top, 10) + MAP_PIN_MAIN_HEIGHT;
 
     return [x, y];
   };
@@ -24,19 +25,19 @@
     addressInput.value = getActivePinCoords().join(`, `);
   };
 
-  mapPin.addEventListener(`mousedown`, function (evt) {
+  mapPinMain.addEventListener(`mousedown`, function (evt) {
     if (evt.button === 0) {
       doActiveAll();
     }
   });
 
-  mapPin.addEventListener(`keydown`, function (evt) {
+  mapPinMain.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
       doActiveAll();
     }
   });
 
   window.map = {
-    mapPin
+    mapPinMain, addressInput, getActivePinCoords, MAP_PIN_MAIN_HEIGHT
   };
 })();
