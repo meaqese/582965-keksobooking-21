@@ -10,8 +10,8 @@
     for (let offer of offers) {
       let pinItem = mapPinTemplate.cloneNode(true);
 
-      pinItem.style.left = `${offer.location.x + pinItem.clientWidth}px`;
-      pinItem.style.top = `${offer.location.y + pinItem.clientHeight}px`;
+      pinItem.style.left = `${offer.location.x}px`;
+      pinItem.style.top = `${offer.location.y}px`;
 
       let image = pinItem.querySelector(`img`);
       image.src = offer.author.avatar;

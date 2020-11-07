@@ -3,13 +3,13 @@
 (function () {
   const adForm = window.main.adForm;
 
-  const mapPin = window.main.map.querySelector(`.map__pin--main`);
+  const mapPinMain = window.main.map.querySelector(`.map__pin--main`);
 
   const getInactivePinCoords = function () {
-    const mapPinStyles = getComputedStyle(mapPin);
+    const mapPinStyles = getComputedStyle(mapPinMain);
 
     const x = Math.round(parseInt(mapPinStyles.left, 10) + parseInt(mapPinStyles.width, 10) / 2);
-    const y = Math.round(mapPin.clientHeight / 2 + mapPin.offsetTop);
+    const y = Math.round(mapPinMain.clientHeight / 2 + mapPinMain.offsetTop);
 
     return [x, y];
   };
@@ -79,6 +79,6 @@
   timeOut.addEventListener(`change`, synchronizeTimeInAndOut);
 
   window.form = {
-    mapPin
+    mapPinMain
   };
 })();
