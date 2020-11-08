@@ -8,7 +8,11 @@
     request.responseType = `json`;
 
     request.addEventListener(`load`, function () {
-      onLoad(request.response);
+      if (request.status === 200) {
+        onLoad(request.response);
+      } else {
+        onError(request.statusText);
+      }
     });
 
     request.addEventListener(`error`, function () {
