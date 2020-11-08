@@ -1,62 +1,41 @@
 'use strict';
 
 (function () {
-  const OFFERS_COUNT = 8;
   const TYPES = {
     en: [`palace`, `flat`, `house`, `bungalow`],
     ru: [`Дворец`, `Квартира`, `Дом`, `Бунгало`]
   };
-  const CHECKIN_HOURS = [`12:00`, `13:00`, `14:00`];
-  const CHECKOUT_HOURS = [`12:00`, `13:00`, `14:00`];
-  const FEATURES_LIST = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-  const PHOTOS_LIST = [
-    `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
-  ];
 
-  const getRandRange = window.util.getRandRange;
-  const getRandElement = window.util.getRandElement;
+  window.data = {};
 
-  const mapPin = document.querySelector(`.map__pin`);
+  const onLoad = function (response) {
+    window.data[`offers`] = response;
+  };
 
-  const generateOffers = function (count) {
-    const offers = [];
+  const onError = function (errorText) {
+    const element = document.createElement(`div`);
 
-    for (let i = 1; i <= count; i++) {
-      let locationX = getRandRange(0, window.main.map.clientWidth);
-      let locationY = getRandRange(130 - mapPin.clientHeight, 630 - mapPin.clientHeight);
+    element.style.position = `absolute`;
+    element.style.top = `0`;
+    element.style.left = `0`;
+    element.style.backgroundColor = `red`;
+    element.style.textAlign = `center`;
+    element.style.width = `100%`;
+    element.style.height = `40px`;
+    element.style.lineHeight = `40px`;
 
-      offers.push({
-        "author": {
-          "avatar": `img/avatars/user${i.toString().padStart(2, `0`)}.png`
-        },
-        "offer": {
-          "title": `Заголовок`,
-          "address": `${Math.round(locationX + (mapPin.clientWidth / 2))}, ${locationY + mapPin.clientHeight}`,
-          "price": 100,
-          "type": TYPES.en[getRandRange(0, TYPES.en.length - 1)],
-          "rooms": i,
-          "guests": i,
-          "checkin": getRandElement(CHECKIN_HOURS),
-          "checkout": getRandElement(CHECKOUT_HOURS),
-          "features": FEATURES_LIST.slice(0, getRandRange(1, FEATURES_LIST.length)),
-          "description": `Описание`,
-          "photos": PHOTOS_LIST.slice(0, getRandRange(1, PHOTOS_LIST.length))
-        },
-        "location": {
-          "x": locationX,
-          "y": locationY
-        }
-      });
+    if (errorText.length === 0) {
+      errorText = `Ошибка загрузки`;
     }
+    element.textContent = errorText;
 
-    return offers;
+    document.body.append(element);
+
+    window.data[`offers`] = [];
   };
 
-  const offers = generateOffers(OFFERS_COUNT);
 
-  window.data = {
-    offers, TYPES
-  };
+  window.backend.load(onLoad, onError);
+
+  window.data[`TYPES`] = TYPES;
 })();
