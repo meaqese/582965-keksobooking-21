@@ -3,6 +3,7 @@
 (function () {
   const map = window.main.map;
   const mapPinMain = window.form.mapPinMain;
+  const mapPinMainCenter = Math.round(mapPinMain.clientWidth / 2);
 
   mapPinMain.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
@@ -31,7 +32,9 @@
       if (mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT <= 630 && mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT >= 130) {
         mapPinMain.style.top = (mapPinCoords.y) + `px`;
       }
-      mapPinMain.style.left = (mapPinCoords.x) + `px`;
+      if (mapPinCoords.x + mapPinMainCenter >= 0 && mapPinCoords.x + mapPinMainCenter <= 1200) {
+        mapPinMain.style.left = (mapPinCoords.x) + `px`;
+      }
 
       window.map.addressInput.value = window.map.getActivePinCoords().join(`, `);
     };

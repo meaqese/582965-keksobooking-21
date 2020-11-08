@@ -15,12 +15,37 @@
     return [x, y];
   };
 
+  const onLoad = function (response) {
+    window.pin.renderPins(window.pin.createPins(response));
+  };
+
+  const onError = function (errorText) {
+    const element = document.createElement(`div`);
+
+    element.style.position = `absolute`;
+    element.style.top = `0`;
+    element.style.left = `0`;
+    element.style.backgroundColor = `red`;
+    element.style.textAlign = `center`;
+    element.style.width = `100%`;
+    element.style.height = `40px`;
+    element.style.lineHeight = `40px`;
+    element.style.color = `white`;
+
+    if (errorText.length === 0) {
+      errorText = `Ошибка загрузки`;
+    }
+    element.textContent = errorText;
+
+    document.body.append(element);
+  };
+
   const doActiveAll = function () {
     map.classList.remove(`map--faded`);
     window.main.adForm.classList.remove(`ad-form--disabled`);
     window.util.enableAll(window.main.adFormFieldsets);
     window.util.enableAll(window.main.mapFiltersBlocks);
-    window.pin.renderPins(window.pin.createPins(window.data.offers));
+    window.backend.load(onLoad, onError);
 
     addressInput.value = getActivePinCoords().join(`, `);
   };
