@@ -78,6 +78,71 @@
   timeIn.addEventListener(`change`, synchronizeTimeInAndOut);
   timeOut.addEventListener(`change`, synchronizeTimeInAndOut);
 
+  const successMessage = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorMessage = document.querySelector(`#error`).content.querySelector(`.error`);
+  const closeSuccessMessage = function () {
+    const message = document.querySelector(`.success`);
+    message.remove();
+
+    document.removeEventListener(`keydown`, closeSuccessMessageESC);
+    document.removeEventListener(`click`, closeSuccessMessageClick);
+  };
+
+  const closeSuccessMessageESC = function (evt) {
+    if (evt.key === `Escape`) {
+      closeSuccessMessage();
+    }
+  };
+
+  const closeSuccessMessageClick = function () {
+    closeSuccessMessage();
+  };
+
+  const closeErrorMessage = function () {
+    const message = document.querySelector(`.error`);
+    message.remove();
+
+    document.removeEventListener(`keydown`, closeErrorMessageESC);
+    document.removeEventListener(`click`, closeErrorMessageClick);
+  };
+  const closeErrorMessageESC = function (evt) {
+    if (evt.key === `Escape`) {
+      closeErrorMessage();
+    }
+  };
+  const closeErrorMessageClick = function () {
+    closeErrorMessage();
+  };
+
+  const onLoad = function () {
+    const message = successMessage.cloneNode(true);
+    document.body.append(message);
+
+    document.addEventListener(`click`, closeSuccessMessageClick);
+    document.addEventListener(`keydown`, closeSuccessMessageESC);
+  };
+
+  const onError = function () {
+    const message = errorMessage.cloneNode(true);
+    const main = document.querySelector(`main`);
+
+    main.append(message);
+
+    document.addEventListener(`click`, closeErrorMessageClick);
+    document.addEventListener(`keydown`, closeErrorMessageESC);
+  };
+
+  adForm.addEventListener(`submit`, function (evt) {
+    evt.preventDefault();
+
+    const url = adForm.getAttribute(`action`);
+    window.backend.send(new FormData(adForm), onLoad, onError, url);
+  });
+
+  // Зачем? Я не знаю, в пункте 5 в задаче
+  const clearForm = adForm.querySelector(`.ad-form__reset`);
+  clearForm.addEventListener(`click`, function () {});
+
   window.form = {
     mapPinMain
   };
