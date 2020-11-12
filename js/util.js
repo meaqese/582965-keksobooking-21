@@ -19,9 +19,7 @@
   };
 
   const clearAllChildren = function (parentNode) {
-    while (parentNode.lastElementChild) {
-      parentNode.removeChild(parentNode.lastElementChild);
-    }
+    parentNode.innerHTML = ``;
   };
 
   const disableAll = function (elements = HTMLAllCollection) {

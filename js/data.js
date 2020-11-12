@@ -2,8 +2,10 @@
 
 (function () {
   const TYPES = {
-    en: [`palace`, `flat`, `house`, `bungalow`],
-    ru: [`Дворец`, `Квартира`, `Дом`, `Бунгало`]
+    palace: `Дворец`,
+    flat: `Квартира`,
+    house: `Дом`,
+    bungalow: `Бунгало`
   };
 
   window.data = {TYPES};

@@ -8,6 +8,8 @@
 
   const addressInput = window.main.adForm.querySelector(`#address`);
 
+  window.map = {};
+
   const getActivePinCoords = function () {
     const x = Math.round(mapPinMain.clientWidth / 2 + mapPinMain.offsetLeft);
     const y = parseInt(getComputedStyle(mapPinMain).top, 10) + MAP_PIN_MAIN_HEIGHT;
@@ -16,7 +18,10 @@
   };
 
   const onLoad = function (response) {
+    window.map.pins = response;
+
     window.pin.renderPins(window.pin.createPins(response));
+    window.util.enableAll(window.main.mapFiltersBlocks);
   };
 
   const onError = function (errorText) {
@@ -44,19 +49,18 @@
     map.classList.remove(`map--faded`);
     window.main.adForm.classList.remove(`ad-form--disabled`);
     window.util.enableAll(window.main.adFormFieldsets);
-    window.util.enableAll(window.main.mapFiltersBlocks);
     window.backend.load(onLoad, onError);
 
     addressInput.value = getActivePinCoords().join(`, `);
   };
 
-  mapPinMain.addEventListener(`mousedown`, function (evt) {
+  mapPinMain.addEventListener(`mousedown`, (evt) => {
     if (evt.button === 0) {
       doActiveAll();
     }
   });
 
-  mapPinMain.addEventListener(`keydown`, function (evt) {
+  mapPinMain.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
       doActiveAll();
     }
