@@ -2,7 +2,7 @@
 
 (function () {
   const addRequestListeners = function (request, onLoad, onError) {
-    request.addEventListener(`load`, function () {
+    request.addEventListener(`load`, () => {
       if (request.status === 200) {
         onLoad(request.response);
       } else {
@@ -10,11 +10,11 @@
       }
     });
 
-    request.addEventListener(`error`, function () {
+    request.addEventListener(`error`, () => {
       onError(request.statusText);
     });
 
-    request.addEventListener(`timeout`, function () {
+    request.addEventListener(`timeout`, () => {
       onError(`Превышено время ожидания`);
     });
   };

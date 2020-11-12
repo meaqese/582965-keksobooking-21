@@ -66,7 +66,6 @@
 
   const houseType = adForm.querySelector(`#type`);
   const priceInput = adForm.querySelector(`#price`);
-
   houseType.addEventListener(`change`, function () {
     const houseTypeValue = houseType.value;
     const minPricesList = {
@@ -159,7 +158,7 @@
     window.backend.send(new FormData(adForm), onLoad, onError, url);
   });
 
-  // Зачем? Я не знаю, в пункте 5 в задаче
+
   const clearForm = adForm.querySelector(`.ad-form__reset`);
   clearForm.addEventListener(`click`, function (evt) {
     evt.preventDefault();

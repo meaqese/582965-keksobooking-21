@@ -12,6 +12,6 @@
   window.util.disableAll(mapFiltersBlocks);
 
   window.main = {
-    map, adForm, adFormFieldsets, mapFiltersBlocks
+    map, adForm, adFormFieldsets, mapFiltersBlocks, mapFilters
   };
 })();
