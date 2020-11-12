@@ -23,8 +23,8 @@
     mapPinMain.style.top = `375px`;
     mapPinMain.style.left = `570px`;
 
-    window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
-    window.util.clearAllElements(`.map__card`, window.main.map);
+    window.util.clearAllPins(mapPins);
+    window.util.hideCard(window.main.map);
 
     adForm.reset();
     window.filters.filters.reset();

@@ -34,8 +34,28 @@
     }
   };
 
+  const clearAllPins = function (mapPins) {
+    window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
+  };
+
+  const hideCard = function (map) {
+    window.util.clearAllElements(`.map__card`, map);
+  };
+
+  const intersection = function (array1, array2) {
+    const intersectionArray = [];
+
+    for (let elem of array1) {
+      if (array2.includes(elem)) {
+        intersectionArray.push(elem);
+      }
+    }
+
+    return intersectionArray;
+  };
+
   window.util = {
     getRandRange, getRandElement, clearAllElements, clearAllChildren,
-    disableAll, enableAll
+    disableAll, enableAll, clearAllPins, hideCard, intersection
   };
 })();
