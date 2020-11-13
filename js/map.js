@@ -1,72 +1,72 @@
 'use strict';
 
-(function () {
-  const MAP_PIN_MAIN_HEIGHT = 84;
 
-  const map = window.main.map;
-  const mapPinMain = window.form.mapPinMain;
+const MAP_PIN_MAIN_HEIGHT = 84;
 
-  const addressInput = window.main.adForm.querySelector(`#address`);
+const map = window.main.map;
+const mapPinMain = window.form.mapPinMain;
 
-  window.map = {};
+const addressInput = window.main.adForm.querySelector(`#address`);
 
-  const getActivePinCoords = function () {
-    const x = Math.round(mapPinMain.clientWidth / 2 + mapPinMain.offsetLeft);
-    const y = parseInt(getComputedStyle(mapPinMain).top, 10) + MAP_PIN_MAIN_HEIGHT;
+window.map = {};
 
-    return [x, y];
-  };
+const getActivePinCoords = function () {
+  const x = Math.round(mapPinMain.clientWidth / 2 + mapPinMain.offsetLeft);
+  const y = parseInt(getComputedStyle(mapPinMain).top, 10) + MAP_PIN_MAIN_HEIGHT;
 
-  const onLoad = function (response) {
-    window.map.pins = response;
+  return [x, y];
+};
 
-    window.pin.renderPins(window.pin.createPins(response));
-    window.util.enableAll(window.main.mapFiltersBlocks);
-  };
+const onLoad = function (response) {
+  window.map.pins = response;
 
-  const onError = function (errorText) {
-    const element = document.createElement(`div`);
+  window.pin.renderPins(window.pin.createPins(response));
+  window.util.enableAll(window.main.mapFiltersBlocks);
+};
 
-    element.style.position = `absolute`;
-    element.style.top = `0`;
-    element.style.left = `0`;
-    element.style.backgroundColor = `red`;
-    element.style.textAlign = `center`;
-    element.style.width = `100%`;
-    element.style.height = `40px`;
-    element.style.lineHeight = `40px`;
-    element.style.color = `white`;
+const onError = function (errorText) {
+  const element = document.createElement(`div`);
 
-    if (errorText.length === 0) {
-      errorText = `Ошибка загрузки`;
-    }
-    element.textContent = errorText;
+  element.style.position = `absolute`;
+  element.style.top = `0`;
+  element.style.left = `0`;
+  element.style.backgroundColor = `red`;
+  element.style.textAlign = `center`;
+  element.style.width = `100%`;
+  element.style.height = `40px`;
+  element.style.lineHeight = `40px`;
+  element.style.color = `white`;
 
-    document.body.append(element);
-  };
+  if (errorText.length === 0) {
+    errorText = `Ошибка загрузки`;
+  }
+  element.textContent = errorText;
 
-  const doActiveAll = function () {
-    map.classList.remove(`map--faded`);
-    window.main.adForm.classList.remove(`ad-form--disabled`);
-    window.util.enableAll(window.main.adFormFieldsets);
-    window.backend.load(onLoad, onError);
+  document.body.append(element);
+};
 
-    addressInput.value = getActivePinCoords().join(`, `);
-  };
+const doActiveAll = function () {
+  map.classList.remove(`map--faded`);
+  window.main.adForm.classList.remove(`ad-form--disabled`);
+  window.util.enableAll(window.main.adFormFieldsets);
+  window.backend.load(onLoad, onError);
 
-  mapPinMain.addEventListener(`mousedown`, (evt) => {
-    if (evt.button === 0) {
-      doActiveAll();
-    }
-  });
+  addressInput.value = getActivePinCoords().join(`, `);
+};
 
-  mapPinMain.addEventListener(`keydown`, (evt) => {
-    if (evt.key === `Enter`) {
-      doActiveAll();
-    }
-  });
+mapPinMain.addEventListener(`mousedown`, (evt) => {
+  if (evt.button === 0) {
+    doActiveAll();
+  }
+});
 
-  window.map = {
-    mapPinMain, addressInput, getActivePinCoords, MAP_PIN_MAIN_HEIGHT
-  };
-})();
+mapPinMain.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    doActiveAll();
+  }
+});
+
+window.map = {
+  mapPinMain, addressInput, getActivePinCoords, MAP_PIN_MAIN_HEIGHT
+};
+
