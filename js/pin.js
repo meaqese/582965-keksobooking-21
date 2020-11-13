@@ -1,45 +1,45 @@
 'use strict';
 
-(function () {
-  const MAX_OFFERS_COUNT = 5;
 
-  const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-  const mapPins = window.main.map.querySelector(`.map__pins`);
+const MAX_OFFERS_COUNT = 5;
 
-  const createPins = function (offers) {
-    const fragment = document.createDocumentFragment();
+const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mapPins = window.main.map.querySelector(`.map__pins`);
 
-    const maxOffers = offers.length > MAX_OFFERS_COUNT ? MAX_OFFERS_COUNT : offers.length;
+const createPins = function (offers) {
+  const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < maxOffers; i++) {
-      let pinItem = mapPinTemplate.cloneNode(true);
-      const offer = offers[i];
+  const maxOffers = offers.length > MAX_OFFERS_COUNT ? MAX_OFFERS_COUNT : offers.length;
 
-      pinItem.style.left = `${offer.location.x}px`;
-      pinItem.style.top = `${offer.location.y}px`;
+  for (let i = 0; i < maxOffers; i++) {
+    let pinItem = mapPinTemplate.cloneNode(true);
+    const offer = offers[i];
 
-      let image = pinItem.querySelector(`img`);
-      image.src = offer.author.avatar;
-      image.alt = offer.offer.title;
+    pinItem.style.left = `${offer.location.x}px`;
+    pinItem.style.top = `${offer.location.y}px`;
 
-      pinItem.addEventListener(`click`, function () {
-        window.util.clearAllElements(`.map__card`, window.main.map);
-        mapPins.after(window.card.createCard(offer));
-      });
+    let image = pinItem.querySelector(`img`);
+    image.src = offer.author.avatar;
+    image.alt = offer.offer.title;
 
-      fragment.appendChild(pinItem);
-    }
+    pinItem.addEventListener(`click`, function () {
+      window.util.clearAllElements(`.map__card`, window.main.map);
+      mapPins.after(window.card.createCard(offer));
+    });
 
-    return fragment;
-  };
+    fragment.appendChild(pinItem);
+  }
 
-  const renderPins = function (fragment) {
-    window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
+  return fragment;
+};
 
-    mapPins.append(fragment);
-  };
+const renderPins = function (fragment) {
+  window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
 
-  window.pin = {
-    renderPins, createPins
-  };
-})();
+  mapPins.append(fragment);
+};
+
+window.pin = {
+  renderPins, createPins
+};
+
