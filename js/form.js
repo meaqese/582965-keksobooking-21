@@ -6,7 +6,7 @@ const adForm = window.main.adForm;
 const mapPinMain = window.main.map.querySelector(`.map__pin--main`);
 const mapPins = window.main.map.querySelector(`.map__pins`);
 
-const getInactivePinCoords = function () {
+const getInactivePinCoords = () => {
   const mapPinStyles = getComputedStyle(mapPinMain);
 
   const x = Math.round(parseInt(mapPinStyles.left, 10) + parseInt(mapPinStyles.width, 10) / 2);
@@ -15,7 +15,7 @@ const getInactivePinCoords = function () {
   return [x, y];
 };
 
-const doInactiveAll = function () {
+const doInactiveAll = () => {
   window.main.map.classList.add(`map--faded`);
   window.main.adForm.classList.add(`ad-form--disabled`);
   window.util.disableAll(window.main.adFormFieldsets);
@@ -38,7 +38,7 @@ addressInput.value = getInactivePinCoords().join(`, `);
 const roomsCount = adForm.querySelector(`#room_number`);
 const guestsCount = adForm.querySelector(`#capacity`);
 
-const checkRoomsAndGuestsCompatibility = function (input) {
+const checkRoomsAndGuestsCompatibility = (input) => {
   const rooms = parseInt(roomsCount.value, 10);
   const guests = parseInt(guestsCount.value, 10);
 
@@ -56,17 +56,17 @@ const checkRoomsAndGuestsCompatibility = function (input) {
   input.reportValidity();
 };
 
-roomsCount.addEventListener(`change`, function () {
+roomsCount.addEventListener(`change`, () => {
   checkRoomsAndGuestsCompatibility(roomsCount);
 });
 
-guestsCount.addEventListener(`change`, function () {
+guestsCount.addEventListener(`change`, () => {
   checkRoomsAndGuestsCompatibility(guestsCount);
 });
 
 const houseType = adForm.querySelector(`#type`);
 const priceInput = adForm.querySelector(`#price`);
-houseType.addEventListener(`change`, function () {
+houseType.addEventListener(`change`, () => {
   const houseTypeValue = houseType.value;
   const minPricesList = {
     bungalow: 0,
@@ -80,14 +80,14 @@ houseType.addEventListener(`change`, function () {
   priceInput.reportValidity();
 });
 
-priceInput.addEventListener(`input`, function () {
+priceInput.addEventListener(`input`, () => {
   priceInput.reportValidity();
 });
 
 const timeIn = adForm.querySelector(`#timein`);
 const timeOut = adForm.querySelector(`#timeout`);
 
-const synchronizeTimeInAndOut = function (evt) {
+const synchronizeTimeInAndOut = (evt) => {
   timeIn.value = evt.target.value;
   timeOut.value = evt.target.value;
 };
@@ -97,7 +97,7 @@ timeOut.addEventListener(`change`, synchronizeTimeInAndOut);
 
 const successMessage = document.querySelector(`#success`).content.querySelector(`.success`);
 const errorMessage = document.querySelector(`#error`).content.querySelector(`.error`);
-const closeSuccessMessage = function () {
+const closeSuccessMessage = () => {
   const message = document.querySelector(`.success`);
   message.remove();
 
@@ -105,33 +105,33 @@ const closeSuccessMessage = function () {
   document.removeEventListener(`click`, closeSuccessMessageClick);
 };
 
-const closeSuccessMessageESC = function (evt) {
+const closeSuccessMessageESC = (evt) => {
   if (evt.key === `Escape`) {
     closeSuccessMessage();
   }
 };
 
-const closeSuccessMessageClick = function () {
+const closeSuccessMessageClick = () => {
   closeSuccessMessage();
 };
 
-const closeErrorMessage = function () {
+const closeErrorMessage = () => {
   const message = document.querySelector(`.error`);
   message.remove();
 
   document.removeEventListener(`keydown`, closeErrorMessageESC);
   document.removeEventListener(`click`, closeErrorMessageClick);
 };
-const closeErrorMessageESC = function (evt) {
+const closeErrorMessageESC = (evt) => {
   if (evt.key === `Escape`) {
     closeErrorMessage();
   }
 };
-const closeErrorMessageClick = function () {
+const closeErrorMessageClick = () => {
   closeErrorMessage();
 };
 
-const onLoad = function () {
+const onLoad = () => {
   const message = successMessage.cloneNode(true);
   document.body.append(message);
 
@@ -141,7 +141,7 @@ const onLoad = function () {
   document.addEventListener(`keydown`, closeSuccessMessageESC);
 };
 
-const onError = function () {
+const onError = () => {
   const message = errorMessage.cloneNode(true);
   const main = document.querySelector(`main`);
 
@@ -151,7 +151,7 @@ const onError = function () {
   document.addEventListener(`keydown`, closeErrorMessageESC);
 };
 
-adForm.addEventListener(`submit`, function (evt) {
+adForm.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
 
   const url = adForm.getAttribute(`action`);
@@ -160,7 +160,7 @@ adForm.addEventListener(`submit`, function (evt) {
 
 
 const clearForm = adForm.querySelector(`.ad-form__reset`);
-clearForm.addEventListener(`click`, function (evt) {
+clearForm.addEventListener(`click`, (evt) => {
   evt.preventDefault();
   doInactiveAll();
 });

@@ -8,6 +8,7 @@ module.exports = {
     './js/backend.js',
     './js/data.js',
     './js/form.js',
+    './js/photo.js',
     './js/card.js',
     './js/pin.js',
     './js/move.js',

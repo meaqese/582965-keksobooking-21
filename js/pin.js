@@ -6,7 +6,7 @@ const MAX_OFFERS_COUNT = 5;
 const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
 const mapPins = window.main.map.querySelector(`.map__pins`);
 
-const createPins = function (offers) {
+const createPins = (offers) => {
   const fragment = document.createDocumentFragment();
 
   const maxOffers = offers.length > MAX_OFFERS_COUNT ? MAX_OFFERS_COUNT : offers.length;
@@ -22,7 +22,7 @@ const createPins = function (offers) {
     image.src = offer.author.avatar;
     image.alt = offer.offer.title;
 
-    pinItem.addEventListener(`click`, function () {
+    pinItem.addEventListener(`click`, () => {
       window.util.clearAllElements(`.map__card`, window.main.map);
       mapPins.after(window.card.createCard(offer));
     });
@@ -33,7 +33,7 @@ const createPins = function (offers) {
   return fragment;
 };
 
-const renderPins = function (fragment) {
+const renderPins = (fragment) => {
   window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
 
   mapPins.append(fragment);

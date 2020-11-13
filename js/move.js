@@ -1,11 +1,17 @@
 'use strict';
 
+const MAP_BOUNDARY = {
+  top: 130,
+  right: 1200,
+  bottom: 630,
+  left: 0
+};
 
 const map = window.main.map;
 const mapPinMain = window.form.mapPinMain;
 const mapPinMainCenter = Math.round(mapPinMain.clientWidth / 2);
 
-mapPinMain.addEventListener(`mousedown`, function (evt) {
+mapPinMain.addEventListener(`mousedown`, (evt) => {
   evt.preventDefault();
 
   let startCoords = {
@@ -14,7 +20,7 @@ mapPinMain.addEventListener(`mousedown`, function (evt) {
   };
 
   if (evt.button === 0) {
-    const onMouseMove = function (moveEvt) {
+    const onMouseMove = (moveEvt) => {
       const shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -30,17 +36,17 @@ mapPinMain.addEventListener(`mousedown`, function (evt) {
         y: mapPinMain.offsetTop - shift.y
       };
 
-      if (mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT <= 630 && mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT >= 130) {
+      if (mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT <= MAP_BOUNDARY.bottom && mapPinCoords.y + window.map.MAP_PIN_MAIN_HEIGHT > MAP_BOUNDARY.top) {
         mapPinMain.style.top = (mapPinCoords.y) + `px`;
       }
-      if (mapPinCoords.x + mapPinMainCenter >= 0 && mapPinCoords.x + mapPinMainCenter <= 1200) {
+      if (mapPinCoords.x + mapPinMainCenter >= MAP_BOUNDARY.left && mapPinCoords.x + mapPinMainCenter <= MAP_BOUNDARY.right) {
         mapPinMain.style.left = (mapPinCoords.x) + `px`;
       }
 
       window.map.addressInput.value = window.map.getActivePinCoords().join(`, `);
     };
 
-    const onMouseUp = function () {
+    const onMouseUp = () => {
       map.removeEventListener(`mousemove`, onMouseMove);
       map.removeEventListener(`mouseup`, onMouseUp);
 

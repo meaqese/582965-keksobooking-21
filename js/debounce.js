@@ -3,7 +3,7 @@
 
 const DEBOUNCE_TIMEOUT = 500;
 
-window.debounce = function (callback) {
+window.debounce = (callback) => {
   let lastTimeout = null;
 
   return (...params) => {

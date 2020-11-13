@@ -1,9 +1,14 @@
 'use strict';
 
+const STATUS_CODE = {
+  ok: 200
+};
 
-const addRequestListeners = function (request, onLoad, onError) {
+const newRequest = (onLoad, onError) => {
+  const request = new XMLHttpRequest();
+
   request.addEventListener(`load`, () => {
-    if (request.status === 200) {
+    if (request.status === STATUS_CODE.ok) {
       onLoad(request.response);
     } else {
       onError(request.statusText);
@@ -17,24 +22,22 @@ const addRequestListeners = function (request, onLoad, onError) {
   request.addEventListener(`timeout`, () => {
     onError(`Превышено время ожидания`);
   });
+
+  return request;
 };
 
-const load = function (onLoad, onError) {
+const load = (onLoad, onError) => {
   const URL = `https://21.javascript.pages.academy/keksobooking/data`;
 
-  const request = new XMLHttpRequest();
+  const request = newRequest(onLoad, onError);
   request.responseType = `json`;
-
-  addRequestListeners(request, onLoad, onError);
 
   request.open(`GET`, URL);
   request.send();
 };
 
-const send = function (data, onLoad, onError, url) {
-  const request = new XMLHttpRequest();
-
-  addRequestListeners(request, onLoad, onError);
+const send = (data, onLoad, onError, url) => {
+  const request = newRequest(onLoad, onError);
 
   request.open(`POST`, url);
   request.send(data);

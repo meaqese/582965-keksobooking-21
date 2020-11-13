@@ -1,16 +1,16 @@
 'use strict';
 
 
-const getRandRange = function (min, max) {
+const getRandRange = (min, max) => {
   return Math.round(min + (Math.random() * (max - min)));
 };
 
-const getRandElement = function (array, inclusive = false) {
+const getRandElement = (array, inclusive = false) => {
   const max = (inclusive === false) ? array.length - 1 : array.length;
   return array[getRandRange(0, max)];
 };
 
-const clearAllElements = function (selector, parent = document) {
+const clearAllElements = (selector, parent = document) => {
   const elements = parent.querySelectorAll(selector);
 
   for (let element of elements) {
@@ -18,31 +18,31 @@ const clearAllElements = function (selector, parent = document) {
   }
 };
 
-const clearAllChildren = function (parentNode) {
+const clearAllChildren = (parentNode) => {
   parentNode.innerHTML = ``;
 };
 
-const disableAll = function (elements = HTMLAllCollection) {
+const disableAll = (elements = HTMLAllCollection) => {
   for (let element of elements) {
     element.disabled = true;
   }
 };
 
-const enableAll = function (elements = HTMLAllCollection) {
+const enableAll = (elements = HTMLAllCollection) => {
   for (let element of elements) {
     element.disabled = false;
   }
 };
 
-const clearAllPins = function (mapPins) {
+const clearAllPins = (mapPins) => {
   window.util.clearAllElements(`.map__pin:not(.map__pin--main)`, mapPins);
 };
 
-const hideCard = function (map) {
+const hideCard = (map) => {
   window.util.clearAllElements(`.map__card`, map);
 };
 
-const intersection = function (array1, array2) {
+const intersection = (array1, array2) => {
   const intersectionArray = [];
 
   for (let elem of array1) {
@@ -54,8 +54,33 @@ const intersection = function (array1, array2) {
   return intersectionArray;
 };
 
+const createRedErrorMessage = (errorText) => {
+  const element = document.createElement(`div`);
+
+  element.style.position = `absolute`;
+  element.style.top = `0`;
+  element.style.left = `0`;
+  element.style.backgroundColor = `red`;
+  element.style.textAlign = `center`;
+  element.style.width = `100%`;
+  element.style.height = `40px`;
+  element.style.lineHeight = `40px`;
+  element.style.color = `white`;
+
+  if (errorText.length === 0) {
+    errorText = `Ошибка загрузки`;
+  }
+  element.textContent = errorText;
+
+  document.body.append(element);
+
+  setTimeout(() => {
+    element.remove();
+  }, 10000);
+};
+
 window.util = {
   getRandRange, getRandElement, clearAllElements, clearAllChildren,
-  disableAll, enableAll, clearAllPins, hideCard, intersection
+  disableAll, enableAll, clearAllPins, hideCard, intersection, createRedErrorMessage
 };
 

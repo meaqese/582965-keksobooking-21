@@ -1,5 +1,9 @@
 'use strict';
 
+const PRICE = {
+  low: 10000,
+  high: 50000
+};
 
 const filters = window.main.mapFilters;
 
@@ -27,11 +31,11 @@ filters.addEventListener(`change`, () => {
         case `any`:
           return true;
         case `middle`:
-          return offer.price >= 10000 && offer.price <= 50000;
+          return offer.price >= PRICE.low && offer.price <= PRICE.high;
         case `low`:
-          return offer.price < 10000;
+          return offer.price < PRICE.low;
         case `high`:
-          return offer.price > 50000;
+          return offer.price > PRICE.high;
         default:
           return false;
       }

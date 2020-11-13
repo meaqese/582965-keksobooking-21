@@ -10,46 +10,25 @@ const addressInput = window.main.adForm.querySelector(`#address`);
 
 window.map = {};
 
-const getActivePinCoords = function () {
+const getActivePinCoords = () => {
   const x = Math.round(mapPinMain.clientWidth / 2 + mapPinMain.offsetLeft);
   const y = parseInt(getComputedStyle(mapPinMain).top, 10) + MAP_PIN_MAIN_HEIGHT;
 
   return [x, y];
 };
 
-const onLoad = function (response) {
+const onLoad = (response) => {
   window.map.pins = response;
 
   window.pin.renderPins(window.pin.createPins(response));
   window.util.enableAll(window.main.mapFiltersBlocks);
 };
 
-const onError = function (errorText) {
-  const element = document.createElement(`div`);
-
-  element.style.position = `absolute`;
-  element.style.top = `0`;
-  element.style.left = `0`;
-  element.style.backgroundColor = `red`;
-  element.style.textAlign = `center`;
-  element.style.width = `100%`;
-  element.style.height = `40px`;
-  element.style.lineHeight = `40px`;
-  element.style.color = `white`;
-
-  if (errorText.length === 0) {
-    errorText = `Ошибка загрузки`;
-  }
-  element.textContent = errorText;
-
-  document.body.append(element);
-};
-
-const doActiveAll = function () {
+const doActiveAll = () => {
   map.classList.remove(`map--faded`);
   window.main.adForm.classList.remove(`ad-form--disabled`);
   window.util.enableAll(window.main.adFormFieldsets);
-  window.backend.load(onLoad, onError);
+  window.backend.load(onLoad, window.util.createRedErrorMessage);
 
   addressInput.value = getActivePinCoords().join(`, `);
 };

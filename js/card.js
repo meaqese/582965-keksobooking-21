@@ -3,18 +3,18 @@
 
 const clearAllChildren = window.util.clearAllChildren;
 
-const popupClose = function () {
+const popupClose = () => {
   const popup = window.main.map.querySelector(`.map__card`);
   popup.remove();
 
   document.removeEventListener(`keydown`, popupClosePressESC);
 };
 
-const popupClosePress = function () {
+const popupClosePress = () => {
   popupClose();
 };
 
-const popupClosePressESC = function (evt) {
+const popupClosePressESC = (evt) => {
   if (evt.key === `Escape`) {
     popupClose();
   }
@@ -22,7 +22,7 @@ const popupClosePressESC = function (evt) {
 
 const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
 
-const createCard = function (offerObject) {
+const createCard = (offerObject) => {
   const {offer, author} = offerObject;
   const card = cardTemplate.cloneNode(true);
   const closeButton = card.querySelector(`.popup__close`);
