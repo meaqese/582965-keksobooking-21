@@ -9,19 +9,22 @@
   const createPins = function (offers) {
     const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < MAX_OFFERS_COUNT; i++) {
-      let pinItem = mapPinTemplate.cloneNode(true);
+    const maxOffers = offers.length > MAX_OFFERS_COUNT ? MAX_OFFERS_COUNT : offers.length;
 
-      pinItem.style.left = `${offers[i].location.x}px`;
-      pinItem.style.top = `${offers[i].location.y}px`;
+    for (let i = 0; i < maxOffers; i++) {
+      let pinItem = mapPinTemplate.cloneNode(true);
+      const offer = offers[i];
+
+      pinItem.style.left = `${offer.location.x}px`;
+      pinItem.style.top = `${offer.location.y}px`;
 
       let image = pinItem.querySelector(`img`);
-      image.src = offers[i].author.avatar;
-      image.alt = offers[i].offer.title;
+      image.src = offer.author.avatar;
+      image.alt = offer.offer.title;
 
       pinItem.addEventListener(`click`, function () {
         window.util.clearAllElements(`.map__card`, window.main.map);
-        mapPins.after(window.card.createCard(offers[i]));
+        mapPins.after(window.card.createCard(offer));
       });
 
       fragment.appendChild(pinItem);
